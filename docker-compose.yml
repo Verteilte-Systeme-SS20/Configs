@@ -5,7 +5,7 @@ services:
     container_name: vs_config_server
     build: ../Config_Server/
     ports:
-      - "9999:9999"
+      - "9999:8888"
     networks:
       - n_config
 
