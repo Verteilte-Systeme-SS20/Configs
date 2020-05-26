@@ -1,0 +1,40 @@
+version: "3.7"
+
+services:
+  config-server:
+    container_name: vs_config_server
+    build: ../Config_Server/
+    ports:
+      - "9999:9999"
+    networks:
+      - n_config
+
+  bestellung:
+    container_name: vs_bestellung
+    build: ../Backend_REST/
+    restart: on-failure:2
+    ports:
+      - "8888:8080"
+    depends_on:
+      - bestellung_db
+      - config-server
+    networks:
+      - n_bestellung
+      - n_config
+  bestellung_db:
+    image: postgres:12
+    container_name: vs_postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - /data/db:/data/db
+    environment:
+      - POSTGRES_PASSWORD=test
+    networks:
+      - n_bestellung
+
+networks:
+  n_config:
+    driver: bridge
+  n_bestellung:
+    driver: bridge
